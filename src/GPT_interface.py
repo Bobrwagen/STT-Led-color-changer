@@ -20,7 +20,8 @@ class AI_Wrapper:
          by using the visual apperance of the text or any other logical connections to generate me the result in the form of a python list.
          Here is an example: My text input is Russia, your answer would be: [white,blue,red]. You are restricted to have only the color list as answer and you cannot provide any other
          kind of responses apart from that"""},
-         {"role":"user","content":message}]
+         {"role":"user","content":message}],
+         temperature=0.2
         )
             msg = response.choices[0].message.content
         except:
@@ -29,10 +30,9 @@ class AI_Wrapper:
             return msg
         
 
-wrap = AI_Wrapper()
-res = wrap.get_color_from_ai("The ocean while the sun is rising")
+        
 
-print(res)
+
 
 
 
