@@ -1,27 +1,33 @@
 import argparse
 from google.cloud import speech
 
-def transcribe_file(speech_file: str) -> speech.RecognizeResponse:
-    """Transcribe the given audio file."""
-    client = speech.SpeechClient()
+class STT():
+    def transcribe_file(self,speech_file: str):
+        """Transcribe the given audio file."""
+        client = speech.SpeechClient()
 
-    with open(speech_file, "rb") as audio_file:
-        content = audio_file.read()
+        with open(speech_file, "rb") as audio_file:
+            content = audio_file.read()
 
-    audio = speech.RecognitionAudio(content=content)
-    config = speech.RecognitionConfig(
-        encoding = speech.RecognitionConfig.AudioEncoding.MP3,
-        language_code="en-US",
+        audio = speech.RecognitionAudio(content=content)
+        config = speech.RecognitionConfig(
+           # encoding = speech.RecognitionConfig.AudioEncoding.,
+            encoding=speech.RecognitionConfig.AudioEncoding.FLAC,
+            language_code="de-DE",
     )
 
-    response = client.recognize(config=config, audio=audio)
+        response = client.recognize(config=config, audio=audio)
 
-    # Each result is for a consecutive portion of the audio. Iterate through
-    # them to get the transcripts for the entire audio file.
-    for result in response.results:
-        # The first alternative is the most likely one for this portion.
-        print(f"Transcript: {result.alternatives[0].transcript}")
+        # Each result is for a consecutive portion of the audio. Iterate through
+        # them to get the transcripts for the entire audio file.
+        res = []
+        for result in response.results:
+           res.append(result.alternatives)
+           text = []
+        for alt in res:
+            text.append(alt[0].transcript)
+        res = ""
+        for t in text:
+            res+=t 
+        return res
 
-    return response
-
-print(transcribe_file("test.mp3"))
